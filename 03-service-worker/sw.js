@@ -23,11 +23,19 @@ self.addEventListener('activate', event => {
 
 // FETCH: Control de peticiones HTTP
 self.addEventListener('fetch', event => {
-    console.log(event);
-    // Aplicar estrategias del cache
+    // console.log(event);
+    // // Aplicar estrategias del cache
+    //
+    // if( event.request.url.includes('reqres.in')) {
+    //     const rep = new Response(`{ok: false, msg: 'jajaja'}`);
+    //     event.respondWith(rep);
+    // }
 
-    if( event.request.url.includes('reqres.in')) {
-        const rep = new Response(`{ok: false, msg: 'jajaja'}`);
-        event.respondWith(rep);
-    }
+});
+
+// SYNC: Recuperar conexión a internet
+self.addEventListener('sync', event => {
+    console.log('Recuperamos conexión');
+    console.log(event);
+    console.log(event.tag);
 });
