@@ -5,9 +5,12 @@ self.addEventListener('install', event => {
     // Descargar assets
     // Crear cache
     console.log('SW: Instalando SW');
-
-    // actualizar automáticamente el SW
-    // self.skipWaiting();
+    const instalacion = new Promise((resolve, reject) => {
+        console.log('SW: Instalaciones listas');
+        self.skipWaiting(); // forzar prioridad del nuevo SW
+        resolve();
+    })
+    event.waitUntil(instalacion);
 });
 
 
@@ -15,4 +18,16 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
    // Borrar cache antiguo
    console.log("SW: Activado 2");
+});
+
+
+// FETCH: Control de peticiones HTTP
+self.addEventListener('fetch', event => {
+    console.log(event);
+    // Aplicar estrategias del cache
+
+    if( event.request.url.includes('reqres.in')) {
+        const rep = new Response(`{ok: false, msg: 'jajaja'}`);
+        event.respondWith(rep);
+    }
 });
