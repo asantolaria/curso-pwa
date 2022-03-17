@@ -4,11 +4,13 @@
 if ( navigator.serviceWorker ) {
     navigator.serviceWorker.register('/sw.js')
         .then(reg => {
-            setTimeout(() => {
-                reg.sync.register('posteo-tatitos');
-                console.log("Fotos de gatitos enviadas");
-            }, 3000);
+            Notification.requestPermission().then(result => {
+                console.log(result);
+                reg.showNotification('Hola mundo');
+            });
         });
+
+
 }
 
 //
