@@ -5,7 +5,7 @@ const DYNAMIC_CACHE = 'dynamic-v1';
 const INMUTABLE_CACHE = 'inmmutable-v1';
 
 const APP_SHELL = [
-    '/',
+    // '/',  // solo sirve en localhost
     'index.html',
     'css/style.css',
     'img/favicon.ico',
