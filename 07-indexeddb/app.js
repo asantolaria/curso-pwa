@@ -1,6 +1,47 @@
-
 // indexedDB: Reforzamiento
+let request = window.indexedDB.open('mi-database', 2);
 
+// Se actualiza cuando se crea o se sube de versión de la DB
+request.onupgradeneeded = event => {
+    console.log("Actualización de BD");
+    let db = event.target.result;
+    db.createObjectStore('heroes', {
+       keyPath: 'id'
+    });
+};
 
+// Manejo de errores
+request.onerror = event => {
+    console.log('DB Error: ', event.target.error);
+}
+
+// insertar datos
+request.onsuccess = event => {
+    let db = event.target.result;
+    let heroresData = [
+        {id: '1111', heroe: 'Spiderman', mensaje: 'Su amigo y vecino Spiderman'},
+        {id: '2222', heroe: 'Ironman', mensaje: 'Aquí con mi nuevo Mark 50'}
+    ];
+
+    let heroesTransaction = db.transaction('heroes', 'readwrite');
+    heroesTransaction.onerror = event => {
+        console.log('Error guardando', event.target.error);
+    };
+
+    // Informar sobre el éxito de la transaccion
+    heroesTransaction.oncomplete = event => {
+        console.log('Transacción hecha', event);
+    }
+
+    let heroesStore = heroesTransaction.objectStore('heroes');
+
+    for (let heroe of heroresData) {
+        heroesStore.add(heroe);
+    }
+
+    heroesStore.onsuccess = event => {
+        console.log('Nuevo item creado en BD');
+    };
+}
 
 
