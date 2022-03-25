@@ -28,6 +28,9 @@ const APP_SHELL = [
 const APP_SHELL_INMUTABLE = [
     'https://fonts.googleapis.com/css?family=Quicksand:300,400',
     'https://fonts.googleapis.com/css?family=Lato:400,300',
+    'https://use.fontawesome.com/releases/v5.3.1/webfonts/fa-brands-400.ttf',
+    'https://use.fontawesome.com/releases/v5.3.1/webfonts/fa-brands-400.woff',
+    'https://use.fontawesome.com/releases/v5.3.1/webfonts/fa-brands-400.woff2',
     'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
     'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css',
     'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js',
@@ -37,11 +40,11 @@ const APP_SHELL_INMUTABLE = [
 
 
 self.addEventListener('install', e => {
+    const cacheInmutable = caches.open( INMUTABLE_CACHE ).then(cache =>
+        cache.addAll( APP_SHELL_INMUTABLE ));
+
     const cacheStatic = caches.open( STATIC_CACHE ).then(cache =>
         cache.addAll( APP_SHELL ));
-
-    const cacheInmutable = caches.open( INMUTABLE_CACHE ).then(cache => 
-        cache.addAll( APP_SHELL_INMUTABLE ));
     e.waitUntil( Promise.all([ cacheStatic, cacheInmutable ])  );
 
 });
@@ -65,9 +68,9 @@ self.addEventListener('activate', e => {
 
 self.addEventListener( 'fetch', e => {
     let respuesta;
-    if(e.request.url.includes('/api')){
-        // return respuesta
-        respuesta = manejoApiMensajes(DYNAMIC_CACHE, e.request);
+    if ( e.request.url.includes('/api') ) {
+        // return respuesta????
+        respuesta = manejoApiMensajes( DYNAMIC_CACHE, e.request );
     } else {
         respuesta = caches.match( e.request ).then( res => {
             if ( res ) {
@@ -80,9 +83,7 @@ self.addEventListener( 'fetch', e => {
             }
         });
     }
-
     e.respondWith( respuesta );
-
 });
 
 
