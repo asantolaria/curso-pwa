@@ -139,7 +139,62 @@ postBtn.on('click', function() {
         cancelarBtn.click();
         return;
     }
+    var data = {
+        mensaje: mensaje,
+        user: usuario
+    };
+    fetch('api', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(res => res.json())
+        .then(res => console.log('app.js', res))
+        .catch(err => console.log('app.js error', err));
 
     crearMensajeHTML( mensaje, usuario );
 
 });
+
+
+// Obtener mensajes del server
+function getMensajes(){
+    fetch('api')
+        .then(res => res.json())
+        .then(posts => {
+            console.log(posts);
+            posts.forEach(post => {
+                crearMensajeHTML(post.mensaje, post.user);
+            });
+        })
+}
+
+getMensajes();
+
+
+// Detectar cambios de conexión
+function isOnline() {
+    if(navigator.onLine) {
+        // tenemos conexión
+        console.log('Online');
+        $.mdtoast('Online', {
+            interaction: true,
+            interactionTimeout: 1000,
+            actionText: 'OK!'
+        });
+    } else {
+        // no tenemos conexión
+        console.log('Offline');
+        // obligado a que el usuario lo cierre
+        $.mdtoast('Offline', {
+            interaction: true,
+            actionText: 'OK',
+            type: 'warning'
+        });
+    }
+}
+
+window.addEventListener('online', isOnline);
+window.addEventListener('offline', isOnline);
