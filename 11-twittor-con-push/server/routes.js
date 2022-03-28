@@ -44,6 +44,9 @@ router.post('/', function (req, res) {
 
 // Guardar suscripción
 router.post('/subscribe', (req, res) => {
+  const suscripcion = req.body;
+  console.log(suscripcion);
+  push.addSubscription(suscripcion);
   res.json('suscribe');
 });
 
@@ -56,7 +59,13 @@ router.get('/key', (req, res) => {
 // Enviar notificacion push a las personas que queramos
 // Esto es algo que se controla del lado del servidor
 router.post('/push', (req, res) => {
-  res.json('key público');
+  const post = {
+    titulo: req.body.titulo,
+    cuerpo: req.body.cuerpo,
+    usuario: req.body.usuario
+  }
+  res.json(post);
+  push.sendPush(post);
 });
 
 
